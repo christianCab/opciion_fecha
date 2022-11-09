@@ -1,1 +1,98 @@
+program PROBLEMA_6;
+{$codepage utf8}
+var
+    //Datos de entrada
+    dia,mes,anio,opcion:integer;
+    //Datos de salida
+    //Datos auxiliares
+    verFecha:boolean;
+    nomMes:string;
+function esBisiesto(anio:integer):boolean;
+    begin
+    esBisiesto:=(anio MOD 4 = 0) and not (anio MOD 100=0) or (anio MOD 400 =0);
+    end;
+function validarMes(mes:integer):boolean;
+    begin
+    validarMes:=(mes>0)and(mes<=12);
+    end;
+procedure nombreMes(mes:integer; var nomMes:string);
+    begin
+    case mes of
+        1:nomMes:='Enero';
+        2:nomMes:='Febrero';
+        3:nomMes:='Marzo';
+        4:nomMes:='Abril';
+        5:nomMes:='Mayo';
+        6:nomMes:='Junio';
+        7:nomMes:='Julio';
+        8:nomMes:='Agosto';
+        9:nomMes:='Septiembre';
+        10:nomMes:='Octubre';
+        11:nomMes:='Noviembre';
+        12:nomMes:='Diciembre';
+    end;
+    end;
+function validarDia(dia,mes,anio:integer):boolean;
+    var
+        condicion,anioBisiesto:boolean;
+    begin
+    anioBisiesto:=esBisiesto(anio);
+    case mes of
+        1,3,5,7,8,10,12:if (dia>0)and (dia<=31) then
+                            condicion:=TRUE
+                        else
+                            condicion:=FALSE;
+        2:  begin
+            if (dia>0)and(dia<=29)and(anioBisiesto)then
+                condicion:=TRUE
+            else
+                begin
+                if (dia>0)and(dia<=28)and not(anioBisiesto)then
+                    condicion:=TRUE
+                else
+                    condicion:=FALSE;
+                end;
+            end;
+        4,6,9,11:if (dia>0)and (dia<=30) then
+                            condicion:=TRUE
+                        else
+                            condicion:=FALSE;
+    end;
+    validarDia:=condicion;
+    end;
+function validarFecha(dia,mes,anio:integer):boolean;
+    var
+        verDia,verMes,condicion:boolean;
+    begin
+    verDia:=validarDia(dia,mes,anio);
+    verMes:=validarMes(mes);
+    if(verDia)and(verMes)then
+        condicion:=TRUE
+    else
+        condicion:=FALSE;
+    validarFecha:=condicion;
+    end;
+begin
+    write('Ingrese una fecha dia, mes(1 a 12) y año: ');Read(dia,mes, anio);
+    Readln;
+    writeln('Elija una opción de formato:');
+    writeln('Opción 1: Modo texto');
+    writeln('Opción 2: Abrebiado');
+    writeln('Opción 3: Numérico');
+    write('Escriba su elección acontinuación---> ');readln(opcion);
+    verFecha:=validarFecha(dia,mes,anio);
+    if (verFecha)then
+        begin
+        nombreMes(mes,nomMes);
+        case opcion of
+            1:write('La fecha ingresada es: ',dia,' de ',nomMes,' de ',anio);
+            2:write('La fecha ingresada es: ',dia,'/',mes,'/',anio);
+            3:write('La fecha ingresada es: ',anio,mes,dia);
+        else
+            write('La opción ingresada no es correcta');
+        end;
+        end
+    else
+        write('La fecha ingresada es incorrecta');
+end.
 
